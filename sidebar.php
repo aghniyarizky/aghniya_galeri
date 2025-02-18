@@ -1,4 +1,54 @@
 <?php
+include "connection.php";
+if (isset($_SESSION['aghniya_username'])) {
+    $users = $_SESSION['aghniya_user_id'];
+
+    //udah BACA notifnya/belum
+    $sql_not_read = mysqli_query($conn, "SELECT aghniya_notifikasi.*, aghniya_user.*, aghniya_komentar_foto.*, aghniya_like_foto.*
+        FROM aghniya_notifikasi
+        LEFT JOIN aghniya_komentar_foto ON aghniya_notifikasi.aghniya_komentar_id = aghniya_komentar_foto.aghniya_komentar_id
+        LEFT JOIN aghniya_user ON aghniya_notifikasi.aghniya_user_id = aghniya_user.aghniya_user_id
+        LEFT JOIN aghniya_like_foto ON aghniya_notifikasi.aghniya_like_id = aghniya_like_foto.aghniya_like_id
+        WHERE aghniya_notifikasi.aghniya_user_photo_id = $users AND aghniya_notifikasi.is_read = 0;");
+
+    $total_not_read = mysqli_num_rows($sql_not_read);
+
+    //udah MUNCUL notifnya/belum
+    $sql_not_notif = mysqli_query($conn, "SELECT aghniya_notifikasi.*, aghniya_user.*, aghniya_komentar_foto.*, aghniya_like_foto.*
+        FROM aghniya_notifikasi
+        LEFT JOIN aghniya_komentar_foto ON aghniya_notifikasi.aghniya_komentar_id = aghniya_komentar_foto.aghniya_komentar_id
+        LEFT JOIN aghniya_user ON aghniya_notifikasi.aghniya_user_id = aghniya_user.aghniya_user_id
+        LEFT JOIN aghniya_like_foto ON aghniya_notifikasi.aghniya_like_id = aghniya_like_foto.aghniya_like_id
+        WHERE aghniya_notifikasi.aghniya_user_photo_id = $users AND aghniya_notifikasi.is_read = 0 AND aghniya_notifikasi.is_notif = 0");
+
+    $total_not_notif = mysqli_num_rows($sql_not_notif);
+
+    if ($total_not_notif > 0) {
+        $data = mysqli_fetch_assoc($sql_not_notif);
+        $username = $data['aghniya_username'];
+        $comment = $data['aghniya_isi_komentar'];
+
+        if ($data['aghniya_komentar_id']) {
+            $message = "$username Commented on your post: $comment";
+        } else if ($data['aghniya_like_id']) {
+            $message = "$username Liked your post";
+        }
+
+        echo "<script>
+            var result = confirm('$message. Do you want to open the notification right now?');
+            if (result) {
+                window.location.href = 'notification.php';
+            }
+        </script>";
+
+        $id_notif = $data['aghniya_notifikasi_id'];
+        $sql_update_notif = mysqli_query($conn, "UPDATE aghniya_notifikasi SET is_notif = 1 WHERE aghniya_notifikasi_id = $id_notif");
+    }
+}
+?>
+
+
+<?php
 // session_start();
     $users = $_SESSION['aghniya_user_id'];
     $sql = mysqli_query($conn, "SELECT aghniya_notifikasi.*, aghniya_user.*, aghniya_komentar_foto.*, aghniya_like_foto.*

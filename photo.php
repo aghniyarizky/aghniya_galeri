@@ -75,6 +75,8 @@ include 'connection.php';
                             <input type="hidden" value="<?=$data['aghniya_foto_id']?>" name="id_photo">
                             <input type="hidden" value="<?=$user?>" name="id_user">
                             <input type="hidden" value="<?=$data['aghniya_user_id']?>" name="id_user_photo">
+                            <input type="hidden" value="<?php echo $_SERVER['REQUEST_URI']; ?>" name="direction_path">
+
 
                             <div class="w-full mx-auto my-auto">
                                 <div class="flex my-3 text-sm">

@@ -34,7 +34,7 @@ if (isset($_GET['filter'])) {
             GROUP BY aghniya_foto_id
         ) AS count_table ON aghniya_foto.aghniya_foto_id = count_table.aghniya_foto_id
          WHERE aghniya_user.aghniya_username = '$user'
-        ORDER BY count_table.count $filter_total LIMIT 1
+        ORDER BY count_table.count $filter_total LIMIT 3
     ");
 }
     if (isset($_GET['all'])) {
@@ -70,14 +70,14 @@ if (isset($_GET['filter'])) {
                     <div class="flex mt-3 gap-5 text-gray-800">
                         <div class="w-3/5">
                             <select name="kategori" class="border border-1 w-full px-2 py-2 mx-2 rounded-lg">
-                                <option value="like" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] == 'like') ? 'selected' : ''; ?>>Like</option>
-                                <option value="comment" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] == 'comment') ? 'selected' : ''; ?>>Comment</option>
+                                <option value="like" <?php echo (isset($_GET['kategori']) && $_GET['kategori'] == 'like') ? 'selected' : ''; ?>>Like</option>
+                                <option value="comment" <?php echo (isset($_GET['kategori']) && $_GET['kategori'] == 'comment') ? 'selected' : ''; ?>>Comment</option>
                             </select>
                         </div>
                         <div class="w-3/5">
                             <select name="total" class="border border-1 w-full px-2 py-2 mx-2 rounded-lg">
-                                <option value="DESC" <?php echo (isset($_POST['total']) && $_POST['total'] == 'DESC') ? 'selected' : ''; ?>>Terbanyak</option>
-                                <option value="ASC" <?php echo (isset($_POST['total']) && $_POST['total'] == 'ASC') ? 'selected' : ''; ?>>Tersedikit</option>
+                                <option value="DESC" <?php echo (isset($_GET['total']) && $_GET['total'] == 'DESC') ? 'selected' : ''; ?>>Terbanyak</option>
+                                <option value="ASC" <?php echo (isset($_GET['total']) && $_GET['total'] == 'ASC') ? 'selected' : ''; ?>>Tersedikit</option>
                             </select>
                         </div>
                         <div class="w-1/5 flex">
