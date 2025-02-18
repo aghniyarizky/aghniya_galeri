@@ -1,5 +1,8 @@
 <?php
 include "connection.php";
+
+if ($_SESSION['aghniya_role_id'] == 2){
+
 if (isset($_SESSION['aghniya_username'])) {
     $users = $_SESSION['aghniya_user_id'];
 
@@ -44,6 +47,7 @@ if (isset($_SESSION['aghniya_username'])) {
         $id_notif = $data['aghniya_notifikasi_id'];
         $sql_update_notif = mysqli_query($conn, "UPDATE aghniya_notifikasi SET is_notif = 1 WHERE aghniya_notifikasi_id = $id_notif");
     }
+}
 }
 ?>
 
@@ -155,7 +159,15 @@ if (isset($_SESSION['aghniya_username'])) {
                 <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
                 </a>
             </li>
-            
+            <li class="absolute bottom-1 w-full pr-6">
+                    <a href="index.php" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                            <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0"/>
+                        </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap"> Aghniya Picts</span>
+                    </a>
+                </li>
         </ul>
     </div>
     </aside>

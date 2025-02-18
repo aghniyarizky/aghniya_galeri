@@ -12,9 +12,9 @@ $sql = mysqli_query($conn, "SELECT DISTINCT aghniya_foto.aghniya_foto_id, aghniy
     LEFT JOIN aghniya_user ON aghniya_foto.aghniya_user_id = aghniya_user.aghniya_user_id
 ");
 
-if (isset($_POST['filter'])) {
-    $filter_kategori = $_POST['kategori']; 
-    $filter_total = $_POST['total'];
+if (isset($_GET['filter'])) {
+    $filter_kategori = $_GET['kategori']; 
+    $filter_total = $_GET['total'];
     if ($filter_kategori == 'like') {
         $from = "aghniya_like_foto";
         $count_column = "COUNT(aghniya_like_id) AS count";
@@ -32,13 +32,13 @@ if (isset($_POST['filter'])) {
             FROM $from
             GROUP BY aghniya_foto_id
         ) AS count_table ON aghniya_foto.aghniya_foto_id = count_table.aghniya_foto_id
-        ORDER BY count_table.count $filter_total LIMIT 1
+        ORDER BY count_table.count $filter_total LIMIT 3
     ");
 }
 
-if (isset($_POST['all'])) {
-    unset($_POST['kategori']); 
-    unset($_POST['total']); 
+if (isset($_GET['all'])) {
+    unset($_GET['kategori']); 
+    unset($_GET['total']); 
 
     $sql = mysqli_query($conn, "SELECT DISTINCT aghniya_foto.aghniya_foto_id, aghniya_foto.aghniya_lokasi_file, aghniya_user.aghniya_username
         FROM aghniya_foto
@@ -63,19 +63,19 @@ if (isset($_POST['all'])) {
             <div class="text-lg justify-center content-center py-auto my-auto">
                 Filter Berdasarkan:
             </div>
-            <form action="report.php" method="POST">
+            <form action="report.php" method="GET">
                 <div class="w-full">
                     <div class="flex mt-3 gap-5 text-gray-800">
                         <div class="w-3/5">
                             <select name="kategori" class="border border-1 w-full px-2 py-2 mx-2 rounded-lg">
-                                <option value="like" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] == 'like') ? 'selected' : ''; ?>>Like</option>
-                                <option value="comment" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] == 'comment') ? 'selected' : ''; ?>>Comment</option>
+                                <option value="like" <?php echo (isset($_GET['kategori']) && $_GET['kategori'] == 'like') ? 'selected' : ''; ?>>Like</option>
+                                <option value="comment" <?php echo (isset($_GET['kategori']) && $_GET['kategori'] == 'comment') ? 'selected' : ''; ?>>Comment</option>
                             </select>
                         </div>
                         <div class="w-3/5">
                             <select name="total" class="border border-1 w-full px-2 py-2 mx-2 rounded-lg">
-                                <option value="DESC" <?php echo (isset($_POST['total']) && $_POST['total'] == 'DESC') ? 'selected' : ''; ?>>Terbanyak</option>
-                                <option value="ASC" <?php echo (isset($_POST['total']) && $_POST['total'] == 'ASC') ? 'selected' : ''; ?>>Tersedikit</option>
+                                <option value="DESC" <?php echo (isset($_GET['total']) && $_GET['total'] == 'DESC') ? 'selected' : ''; ?>>Terbanyak</option>
+                                <option value="ASC" <?php echo (isset($_GET['total']) && $_GET['total'] == 'ASC') ? 'selected' : ''; ?>>Tersedikit</option>
                             </select>
                         </div>
                         <div class="w-1/5 flex">
@@ -107,10 +107,12 @@ if (isset($_POST['all'])) {
                             <div class="text-sm font-semibold px-1 text-wrap">@<?=$data['aghniya_username']?></div>
                         </div>
 
-                        <form action="cek_likes_user.php" method="POST" class="w-1/3">
+                        <form action="cek_likes.php" method="POST" class="w-1/3">
                             <input type="hidden" value="<?=$data['aghniya_foto_id']?>" name="id_photo">
                             <input type="hidden" value="<?=$userid?>" name="id_user">
                             <input type="hidden" value="<?=$userid?>" name="id_user_photo">
+                            <input type="hidden" value="report.php" name="direction_path">
+
 
                             <div class="w-full mx-auto my-auto">
                                 <div class="flex my-3 text-sm">
