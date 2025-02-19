@@ -29,6 +29,8 @@ $sql = mysqli_query($conn, "SELECT DISTINCT aghniya_foto.aghniya_foto_id, aghniy
 if (isset($_GET['filter'])) {
     $filter_kategori = $_GET['kategori']; 
     $filter_total = $_GET['total'];
+    $filter_album = $_GET['album']; 
+
     if ($filter_kategori == 'like') {
         $from = "aghniya_like_foto";
         $count_column = "COUNT(aghniya_like_id) AS count";
@@ -37,7 +39,7 @@ if (isset($_GET['filter'])) {
         $count_column = "COUNT(aghniya_komentar_id) AS count"; 
     }
 
-    $sql = mysqli_query($conn, "
+$sql = mysqli_query($conn, "
         SELECT aghniya_foto.*, aghniya_user.aghniya_username
         FROM aghniya_foto
         LEFT JOIN aghniya_user ON aghniya_foto.aghniya_user_id = aghniya_user.aghniya_user_id
@@ -46,7 +48,8 @@ if (isset($_GET['filter'])) {
             FROM $from
             GROUP BY aghniya_foto_id
         ) AS count_table ON aghniya_foto.aghniya_foto_id = count_table.aghniya_foto_id
-        WHERE aghniya_user.aghniya_username = '$user'
+        LEFT JOIN aghniya_album ON aghniya_foto.aghniya_album_id = aghniya_album.aghniya_album_id
+        WHERE aghniya_user.aghniya_username = '$user' AND (aghniya_album.aghniya_album_id = '$filter_album' OR '$filter_album' IS NULL)
         ORDER BY count_table.count $filter_total LIMIT $limit OFFSET $offset
     ");
 }
@@ -54,6 +57,7 @@ if (isset($_GET['filter'])) {
 if (isset($_GET['all'])) {
     unset($_GET['kategori']); 
     unset($_GET['total']); 
+    unset($_GET['album']);
 
     $sql = mysqli_query($conn, "SELECT DISTINCT aghniya_foto.aghniya_foto_id, aghniya_foto.aghniya_lokasi_file, aghniya_user.aghniya_username
         FROM aghniya_foto
@@ -62,6 +66,9 @@ if (isset($_GET['all'])) {
         LIMIT $limit OFFSET $offset
     ");
 }
+
+// Ambil daftar album untuk dropdown
+$albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM aghniya_album WHERE aghniya_user_id = $userid");
 
 ?>
 
@@ -96,6 +103,14 @@ if (isset($_GET['all'])) {
                                 <option value="ASC" <?php echo (isset($_GET['total']) && $_GET['total'] == 'ASC') ? 'selected' : ''; ?>>Tersedikit</option>
                             </select>
                         </div>
+                        <div class="w-3/5">
+                            <select name="album" class="border border-1 w-full px-2 py-2 mx-2 rounded-lg">
+                                <option value="" <?php echo !isset($_GET['album']) ? 'selected' : ''; ?>>Semua Album</option>
+                                <?php while ($album = mysqli_fetch_assoc($albums)) { ?>
+                                    <option value="<?=$album['aghniya_album_id']?>" <?php echo (isset($_GET['album']) && $_GET['album'] == $album['aghniya_album_id']) ? 'selected' : ''; ?>><?=$album['aghniya_nama_album']?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
                         <div class="w-1/5 flex">
                             <button type="submit" name="filter" class="border border-1 w-1/2 px-1 py-2 mx-2 rounded-lg bg-gray-800 text-white text-xs font-bold">Filter</button>
                             <button type="submit" name="all" class="border border-1 w-1/2 px-1 py-2 mx-2 rounded-lg bg-gray-800 text-white text-xs font-bold">All</button>
@@ -126,7 +141,7 @@ if (isset($_GET['all'])) {
                         </div>
 
                         <form action="cek_likes_user.php" method="POST" class="w-1/3">
-                            <input type="hidden" value="<?=$data['aghniya_foto_id']?>" name="id_photo">
+                            <input type ="hidden" value="<?=$data['aghniya_foto_id']?>" name="id_photo">
                             <input type="hidden" value="<?=$userid?>" name="id_user">
                             <input type="hidden" value="<?=$userid?>" name="id_user_photo">
                             <input type="hidden" value="your_photo.php?id_photo=<?=$data['aghniya_foto_id']?>" name="direction_path">
@@ -170,24 +185,27 @@ if (isset($_GET['all'])) {
                 </a>
             <?php } ?>
         </div>
-
         <div class="flex justify-center mt-6">
-            <div class="flex gap-4">
-                <a href="your_photo.php?page=<?=$page-1?>" class="<?=$currentPage >1 ? 'disabled' : ''?> flex items-center justify-center px-3 h-8 me-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-3 bi bi-arrow-left-circle" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
-                    </svg>
-                    Previous
-                </a>
+    <div class="flex gap-4">
+        <!-- Previous -->
+        <a href="your_photo.php?page=<?= max(1, $page - 1) ?>" 
+            class="<?= $page == 1 ? 'disabled' : '' ?> flex items-center justify-center px-3 h-8 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-3 bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+            </svg>
+            Previous
+        </a>
 
-                <a href="your_photo.php?page=<?=$page+1?>" class="<?=$currentPage < $totalPages ? 'disabled' : ''?>  flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                    Next
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ml-3 bi bi-arrow-right-circle" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
+        <!-- Next -->
+        <a href="your_photo.php?page=<?= min($page + 1, $total_pages) ?>" 
+            class="<?= $page == $total_pages ? 'disabled' : '' ?> flex items-center justify-center px-3 h-8 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 hover:text-gray-700">
+            Next
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ml-3 bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+            </svg>
+        </a>
+    </div>
+</div>
     </div>
 </body>
 </html>
