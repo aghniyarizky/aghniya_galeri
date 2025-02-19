@@ -32,7 +32,9 @@ $data_comment = mysqli_num_rows($sql_comment);
 </head>
 <body>
     <?php
-    if (isset($_SESSION['aghniya_username'])) { ?>
+    if (isset($_SESSION['aghniya_username'])) { 
+    ?>
+    
         <div class="p-12 sm:ml-64">
             <div class="mx-auto max-w-4xl shadow-lg rounded-lg">
                 <div class="border border-1 border-gray-800 rounded-xl mb-8">
@@ -57,7 +59,7 @@ $data_comment = mysqli_num_rows($sql_comment);
                                     <?=$data['aghniya_deskripsi_foto']?>
                                 </div>
                                 <div class="p-1 text-sm text-justify pr-8 font-semibold">
-                                    <?=$username?>
+                                    <?=$_SESSION['aghniya_username']?>
                                 </div>
 
                                 <form action="cek_likes_user.php" method="POST" name="like">

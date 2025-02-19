@@ -93,7 +93,7 @@ if (isset($_SESSION['aghniya_username'])) {
     <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
         <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
             <div class="flex gap-1">
-                <button class="text-white bg-gray-700 p-1 rounded-full w-1/6">
+                <button class="text-white bg-gray-700 p-1 rounded-full w-1/6" onclick="window.history.back();">
                     <div class="text-white bg-gray-700 p-2 rounded-full w-1/6" onclick="window.history.back();">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
                             <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
@@ -185,7 +185,7 @@ if (isset($_SESSION['aghniya_username'])) {
     <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
         <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
             <div class="flex gap-1">
-                <button class="text-white bg-gray-700 p-1 rounded-full w-1/6">
+                <button class="text-white bg-gray-700 p-1 rounded-full w-1/6" onclick="window.history.back();">
                     <div class="text-white bg-gray-700 p-2 rounded-full w-1/6" onclick="window.history.back();">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
                             <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
