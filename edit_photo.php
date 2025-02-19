@@ -33,19 +33,17 @@ if (mysqli_num_rows($sql) == 0 ){
         <div class="p-12 sm:ml-64">
             <div class="p-8 border border-1 border-gray-800 rounded-xl mb-8">
                 <div class="text-2xl font-semibold">Edit Photo</div> 
-                <form action="cek_add_photo.php" method="POST" enctype="multipart/form-data">  
+                <form action="edit_photo.php?photo_id=<?=$photoid?>" method="POST" enctype="multipart/form-data">  
                     <div class="flex flex-col xl:flex-row gap-8">
-                        <?php while ($data = mysqli_fetch_assoc($sql)) { 
-                            // echo $data['aghniya_deskripsi_foto'];
-                        ?>
+                        <?php while ($data = mysqli_fetch_assoc($sql)) { ?>
                         <div class="w-full lg:w-1/2 content-center">
-                            <!-- <img src="public/nature.jpg" alt="" class="h-auto w-full my-4 rounded-md"> -->
-                                <?php if (!empty($data['aghniya_lokasi_file'])): ?>
-                                    <img src="<?=$data['aghniya_lokasi_file']?>" class="w-20 h-20 mb-4 mx-auto">
-                                <?php endif; ?>
-                            <input type="file" name="photo" class="content-center justify-center items-center sm:mt-4 xl:mt-0" value="<?=$data['aghniya_lokasi_file']?>" required>
+                            <?php if (!empty($data['aghniya_lokasi_file'])): ?>
+                                <img src="<?=$data['aghniya_lokasi_file']?>" class="w-20 h-20 mb-4 mx-auto">
+                            <?php endif; ?>
+                            
+                            <input type="file" name="photo" value="<?=$data['aghniya_lokasi_file']?>" class="content-center justify-center items-center sm:mt-4 xl:mt-0">
                         </div>
-                        
+
                         <div class="w-full xl:w-1/2">
                             <div class="p-1">
                                 Title
@@ -73,55 +71,47 @@ if (mysqli_num_rows($sql) == 0 ){
             </div>
     <?php }else{ ?>
         <div class="p-12 sm:ml-64">
-
         <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
             <span class="font-medium">Info alert!</span> You should have an album before you want to add photo!
         </div>
         </div>
-    
     <?php } ?>
 
 
     <?php 
         if (isset($_POST['submit'])) {
-            $username   = $_POST['username'];
-            $password   = !empty($_POST['password']) ? md5($_POST['password']) : $data['aghniya_password'];
-            $email      = $_POST['email'];
-            $full_name  = $_POST['full_name'];
+            $title      = $_POST['title'];
+            $description= $_POST['description'];
+            $album      = $_POST['album'];
             $user       = $_POST['user'];
         
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-                $title = strtolower(str_replace(' ', '_', $_POST['username']));
                 $photo_tmp = $_FILES['photo']['tmp_name'];
                 $photo_name = $_FILES['photo']['name'];
                 $photo_ext = pathinfo($photo_name, PATHINFO_EXTENSION);
                 $photo_new_name = $title . '_' . $user . '.' . $photo_ext;
                 $target_dir = 'public/';
                 $target_file = $target_dir . $photo_new_name;
-        
+            
                 if (move_uploaded_file($photo_tmp, $target_file)) {
-                    $change = mysqli_query($conn, "UPDATE aghniya_user SET aghniya_username = '$username', aghniya_password = '$password', aghniya_email = '$email', aghniya_nama_lengkap = '$full_name', aghniya_foto_profile = '$target_file' WHERE aghniya_user_id = $user");
-                } else {
-                    $change = mysqli_query($conn, "UPDATE aghniya_user SET aghniya_username = '$username', aghniya_password = '$password', aghniya_email = '$email', aghniya_nama_lengkap = '$full_name' WHERE aghniya_user_id = $user");
+                    $change = mysqli_query($conn, "UPDATE aghniya_foto SET aghniya_judul_foto = '$title', aghniya_deskripsi_foto = '$description', aghniya_lokasi_file = '$target_file' WHERE aghniya_foto_id = $photoid");
                 }
             } else {
-                $change = mysqli_query($conn, "UPDATE aghniya_user SET aghniya_username = '$username', aghniya_password = '$password', aghniya_email = '$email', aghniya_nama_lengkap = '$full_name' WHERE aghniya_user_id = $user");
+                $change = mysqli_query($conn, "UPDATE aghniya_foto SET aghniya_judul_foto = '$title', aghniya_deskripsi_foto = '$description' WHERE aghniya_foto_id = $photoid");
             }
         
             if ($change) {
-                $_SESSION['aghniya_username'] = $username;
                 echo "<script>
-                    alert('Change Profile Successfully!');
-                    location.href='user_page.php';
+                    alert('Edit Photo Successfully!');
+                    location.href='edit_photo.php?photo_id=$photoid';
                 </script>";
             } else {
                 echo "<script>
-                    alert('Failed to Change Profile!');
-                    location.href='edit_profile.php';
+                    alert('Failed to Edit Photo');
+                    location.href='edit_photo.php?photo_id=$photoid';
                 </script>";
             }
         }
-        
     ?>
 </body>
 </html>

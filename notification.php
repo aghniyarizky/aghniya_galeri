@@ -20,6 +20,61 @@ if (isset($_SESSION['aghniya_username'])) {
         SET is_read = 1
         WHERE aghniya_user_photo_id = $user");
     }
+
+    function timeAgo($timestamp) {
+        $time_ago = strtotime($timestamp);
+        $current_time = time();
+        $time_difference = $current_time - $time_ago;
+        $seconds = $time_difference;
+      
+        $minutes      = round($seconds / 60);    
+        $hours        = round($seconds / 3600);      
+        $days         = round($seconds / 86400);     
+        $weeks        = round($seconds / 604800);      
+        $months       = round($seconds / 2629440);     
+        $years        = round($seconds / 31553280); 
+      
+        if ($seconds <= 60) {
+            return "Just Now";
+        } else if ($minutes <= 60) {
+            if ($minutes == 1) {
+                return "one minute ago";
+            } else {
+                return "$minutes minutes ago";
+            }
+        } else if ($hours <= 24) {
+            if ($hours == 1) {
+                return "an hour ago";
+            } else {
+                return "$hours hours ago";
+            }
+        } else if ($days <= 7) {
+            if ($days == 1) {
+                return "yesterday";
+            } else {
+                return "$days days ago";
+            }
+        } else if ($weeks <= 4.3) {
+            if ($weeks == 1) {
+                return "a week ago";
+            } else {
+                return "$weeks weeks ago";
+            }
+        } else if ($months <= 12) {
+            if ($months == 1) {
+                return "a month ago";
+            } else {
+                return "$months months ago";
+            }
+        } else {
+            if ($years == 1) {
+                return "one year ago";
+            } else {
+                return "$years years ago";
+            }
+        }
+    }
+    
 }
 ?>
 
@@ -57,11 +112,13 @@ if (isset($_SESSION['aghniya_username'])) {
                     <div class="font-normal text-right w-full mt-2">
                         <div class="flex justify-between items-center">
                             <div class="text-sm font-semibold">
-                                <?php if($data['aghniya_komentar_id'] != 0 ): ?>
-                                    <?=$data['aghniya_tanggal_komentar']?>
-                                <?php elseif($data['aghniya_like_id'] != 0 ): ?>
-                                    <?=$data['aghniya_tanggal_like']?>
-                                <?php endif; ?>  
+                                <?php 
+                                if($data['aghniya_komentar_id'] != 0 && !empty($data['aghniya_tanggal_komentar'])) {
+                                    echo timeAgo($data['aghniya_tanggal_komentar']);
+                                } elseif($data['aghniya_like_id'] != 0 && !empty($data['aghniya_tanggal_like'])) {
+                                    echo timeAgo($data['aghniya_tanggal_like']);
+                                }
+                                ?>   
                             </div>
                             <form action="cek_notification.php" method="POST">
                                 <input type="hidden" name="id_notif" value="<?=$data['aghniya_notifikasi_id']?>">
@@ -72,7 +129,7 @@ if (isset($_SESSION['aghniya_username'])) {
                                 </button>
                             </form>
                         </div>
-                    </div>                  
+                    </div> 
                 </div>
             <?php } ?>
 

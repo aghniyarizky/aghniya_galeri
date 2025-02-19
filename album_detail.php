@@ -21,7 +21,24 @@ if ($album_id) {
     $album_data = mysqli_fetch_assoc($sql);
 
     if ($album_data) {
-        $foto_data = mysqli_query($conn, "SELECT * FROM aghniya_foto LEFT JOIN aghniya_user ON aghniya_foto.aghniya_user_id = aghniya_user.aghniya_user_id  WHERE aghniya_album_id = $album_id AND aghniya_lokasi_file IS NOT NULL");
+        $perPage = 6;
+        
+        $fotoCountQuery = mysqli_query($conn, "SELECT COUNT(*) as total FROM aghniya_foto WHERE aghniya_album_id = $album_id AND aghniya_lokasi_file IS NOT NULL");
+        $fotoCount = mysqli_fetch_assoc($fotoCountQuery)['total'];
+        
+        $totalPages = ceil($fotoCount / $perPage);
+
+        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+        $currentPage = ($currentPage > 0) ? $currentPage : 1;
+
+        $start = ($currentPage - 1) * $perPage;
+
+        $foto_data = mysqli_query($conn, "
+            SELECT * FROM aghniya_foto 
+            LEFT JOIN aghniya_user ON aghniya_foto.aghniya_user_id = aghniya_user.aghniya_user_id
+            WHERE aghniya_album_id = $album_id AND aghniya_lokasi_file IS NOT NULL
+            LIMIT $start, $perPage
+        ");
     }
     $dataArray = [];
     while ($data = mysqli_fetch_assoc($foto_data)) {
@@ -42,7 +59,7 @@ if ($album_id) {
     <div class="p-12 sm:ml-64">
         <div class="h-auto">
             <?php if ($album_data) { ?>
-                <div class="my-5 text-white mb-12">
+                <div class="my-5 text-white mb-12 my-24">
                     <div class="flex flex-col items-center justify-center">
                         <div class="w-2/3 my-2 items-center justify-center mx-auto">
                             <?php if (!empty($dataArray)){ ?>
@@ -55,8 +72,6 @@ if ($album_id) {
                         </div>
                     </div>
                 </div>
-                <!-- Tampilkan foto jika ada -->
-                 
                 <div class="flex flex-wrap gap-8 sm:gap-12 content-center justify-center mt-9">
                     <?php if (empty($dataArray)){ ?>
                         <div class="text-center font-semibold text-xl text-gray-500">You have 0 picture in this album</div>
@@ -136,6 +151,33 @@ if ($album_id) {
                         <?php } ?>
                     <?php } ?>
                 </div>
+                <?php if (!empty($dataArray)){?>
+                 <div class="flex justify-center mt-6">
+                    <div class="flex gap-4">
+                            <a href="album_detail.php?album_id=<?=$album_id?>&page=<?=($currentPage - 1)?>" class="<?=$currentPage >1 ? 'disabled' : ''?> flex items-center justify-center px-3 h-8 me-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-3 bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+                                </svg>
+                                Previous
+                            </a>
+                            <!-- <a href="album_detail.php?album_id=<?=$album_id?>&page=<?=($currentPage - 1)?>" class="text-lg text-blue-500">Previous</a> -->
+                        
+
+                        <!-- <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <a href="album_detail.php?album_id=<?=$album_id?>&page=<?=$i?>" class="text-lg text-blue-500"><?= $i ?></a>
+                        <?php endfor; ?> -->
+
+                            <a href="album_detail.php?album_id=<?=$album_id?>&page=<?=($currentPage + 1)?>" class="<?=$currentPage < $totalPages ? 'disabled' : ''?>  flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                Next
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ml-3 bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                                </svg>
+                            </a>
+
+                            <!-- <a href="album_detail.php?album_id=<?=$album_id?>&page=<?=($currentPage + 1)?>" class="text-lg text-blue-500">Next</a> -->
+                    </div>
+                </div>
+                <?php } ?>
             <?php }else{ ?>
                 <div class="text-center font-semibold text-xl text-gray-500">Album not found</div>
             <?php } ?>
