@@ -104,7 +104,7 @@ if (isset($_GET['all'])) {
                     </div>
                     <div class="flex">
                         <div class="w-1/3 justify-start my-auto">
-                            <div class="text-sm font-semibold px-1 text-wrap">@<?=$data['aghniya_username']?></div>
+                            <div class="text-sm font-semibold px-1 text-wrap"> <?=$data['aghniya_username']?></div>
                         </div>
 
                         <form action="cek_likes.php" method="POST" class="w-1/3">
