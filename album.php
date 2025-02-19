@@ -40,6 +40,7 @@ $total_picts = 0;
     <link href="./src/output.css" rel="stylesheet">
 </head>
 <body>
+    <div class="">
     <div class="flex flex-wrap gap-8 items-center justify-center content-center">
     <?php while($data = mysqli_fetch_assoc($sql)) { 
         $album_id = $data['aghniya_album_id'];
@@ -111,6 +112,7 @@ $total_picts = 0;
 
                             <!-- <a href="album_detail.php?album_id=<?=$album_id?>&page=<?=($currentPage + 1)?>" class="text-lg text-blue-500">Next</a> -->
                     </div>
+                </div>
                 </div>
 </body>
 </html>
