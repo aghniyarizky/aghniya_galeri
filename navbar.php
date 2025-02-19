@@ -1,3 +1,6 @@
+<?php 
+    if (isset($_SESSION['aghniya_username'])) { 
+?>
 <?php if ($_SESSION['aghniya_role_id'] == 1){ ?>
 
 <?php
@@ -179,4 +182,50 @@ if (isset($_SESSION['aghniya_username'])) {
 </body>
 </html>
 
+<?php } ?>
+<?php }else{ ?>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM6g0g5z5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e" crossorigin="anonymous">
+    <link href="./src/output.css" rel="stylesheet">
+</head>
+<body>
+    <div class="w-full bg-gray-800">
+        <div class="flex text-white p-4">
+            <div class="w-full md:w-3/12 flex md:mx-auto sm:mb-0 flex">
+                <a href="index.php" class="flex items-center p-2 text-gray-900 dark:text-white group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                        <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0"/>
+                    </svg>
+                    <span class="ms-3 font-bold text-xs sm:text-sm md:text-md">Aghniya Picts</span>
+                </a>
+            </div>
+            <div class="sm:w-6/12 md:w-10/12 my-auto mx-5">
+                <div class="w-full rounded-lg px-2 py-1 py-auto my-auto text-black"></div>
+            </div>
+            <div class="w-5/12 md:w-2/12 flex justify-center content-center mx-auto my-auto text-center">
+                <div class="flex">
+                    <div class="w-full mx-auto my-auto flex gap-3">                        
+                        <a href="user_page.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:h-8 md:w-8" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    document.getElementById('user').addEventListener('click', function() {
+        window.location.href = 'user_page.php'; 
+    });
+</script>
+</body>
+</html>
 <?php } ?>
