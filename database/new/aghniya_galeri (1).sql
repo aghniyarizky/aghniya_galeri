@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 18, 2025 at 05:41 PM
+-- Generation Time: Feb 20, 2025 at 07:18 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.8
 
@@ -44,7 +44,12 @@ INSERT INTO `aghniya_album` (`aghniya_album_id`, `aghniya_nama_album`, `aghniya_
 (2, 'uiiaiuiia', 'uiaioa', '2025-01-16', 1),
 (5, 'punya dila', 'punya dilaaaaaaaaaaa', '2025-01-22', 3),
 (10, 'lele`s', ' leleeeeeeeeeee', '2025-02-06', 8),
-(12, 'aaa', 'aaaaaaaaabbccc', '2025-02-12', 3);
+(12, 'aaa', 'aaaaaaaaabbccc', '2025-02-12', 3),
+(15, 'a', 'a', '2025-02-20', 3),
+(16, 'b', 'b', '2025-02-20', 3),
+(17, 'c', 'c', '2025-02-20', 3),
+(18, 'd', 'd', '2025-02-20', 3),
+(21, 'y', 'y', '2025-02-20', 3);
 
 -- --------------------------------------------------------
 
@@ -77,7 +82,8 @@ INSERT INTO `aghniya_foto` (`aghniya_foto_id`, `aghniya_judul_foto`, `aghniya_de
 (12, 'mweheheh', 'MWEHEHEHE', '2025-01-22', 'public/mweheheh_1.jpg', 2, 1),
 (22, 'pkl', 'timeline pkl', '2025-01-30', 'public/pkl_3.png', 5, 3),
 (27, 'rkw', 'rurukakawawa', '2025-02-06', 'public/rkw_8.jpg', 10, 8),
-(29, 'cek', 'cek', '2025-02-12', 'public/cek_3.png', 12, 3);
+(29, 'cek', 'cek', '2025-02-12', 'public/cek_3.png', 12, 3),
+(35, 'e', 'e', '2025-02-20', 'public/e_3.jpg', 12, 3);
 
 -- --------------------------------------------------------
 
@@ -153,7 +159,10 @@ INSERT INTO `aghniya_komentar_foto` (`aghniya_komentar_id`, `aghniya_foto_id`, `
 (74, 11, 3, 'ooo', '2025-02-18'),
 (75, 11, 3, 'pop\r\n', '2025-02-18'),
 (76, 11, 3, 'ow', '2025-02-18'),
-(77, 11, 3, 'pow', '2025-02-18');
+(77, 11, 3, 'pow', '2025-02-18'),
+(78, 7, 4, 'yay', '2025-02-19'),
+(79, 35, 3, 'ok\r\n', '2025-02-21'),
+(80, 7, 1, 'wuw', '2025-02-21');
 
 -- --------------------------------------------------------
 
@@ -190,14 +199,18 @@ INSERT INTO `aghniya_like_foto` (`aghniya_like_id`, `aghniya_foto_id`, `aghniya_
 (74, 1, 10, '2025-02-18'),
 (97, 6, 10, '2025-02-18'),
 (107, 29, 4, '2025-02-18'),
-(108, 7, 4, '2025-02-18'),
 (112, 12, 3, '2025-02-18'),
 (117, 27, 3, '2025-02-18'),
 (118, 29, 3, '2025-02-18'),
 (119, 7, 3, '2025-02-18'),
 (120, 10, 3, '2025-02-18'),
 (121, 8, 3, '2025-02-18'),
-(122, 11, 3, '2025-02-18');
+(122, 11, 3, '2025-02-18'),
+(133, 6, 4, '2025-02-19'),
+(134, 1, 4, '2025-02-19'),
+(135, 7, 4, '2025-02-19'),
+(136, 29, 1, '2025-02-20'),
+(137, 6, 3, '2025-02-21');
 
 -- --------------------------------------------------------
 
@@ -214,45 +227,53 @@ CREATE TABLE `aghniya_notifikasi` (
   `aghniya_user_photo_id` int NOT NULL,
   `is_read` int NOT NULL,
   `aghniya_like_id` int NOT NULL,
-  `is_notif` int NOT NULL
+  `is_notif` int NOT NULL,
+  `mark_read` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `aghniya_notifikasi`
 --
 
-INSERT INTO `aghniya_notifikasi` (`aghniya_notifikasi_id`, `aghniya_foto_id`, `aghniya_komentar_id`, `aghniya_user_id`, `created_at`, `aghniya_user_photo_id`, `is_read`, `aghniya_like_id`, `is_notif`) VALUES
-(27, 8, 0, 1, '2025-01-30', 1, 1, 47, 0),
-(31, 12, 0, 1, '2025-01-30', 1, 1, 51, 0),
-(32, 22, 0, 1, '2025-01-30', 3, 0, 52, 1),
-(33, 1, 0, 1, '2025-01-30', 1, 1, 53, 1),
-(35, 9, 0, 1, '2025-01-30', 1, 1, 56, 1),
-(36, 7, 0, 1, '2025-01-30', 1, 1, 57, 1),
-(37, 11, 0, 1, '2025-01-30', 3, 0, 58, 1),
-(39, 10, 28, 1, '2025-02-05', 3, 0, 0, 1),
-(41, 22, 0, 3, '2025-02-05', 3, 0, 60, 1),
-(42, 22, 31, 3, '2025-02-05', 3, 0, 0, 1),
-(43, 1, 32, 3, '2025-02-06', 1, 0, 0, 1),
-(45, 11, 34, 1, '2025-02-06', 3, 0, 0, 1),
-(48, 12, 37, 1, '2025-02-06', 1, 0, 0, 1),
-(49, 22, 38, 1, '2025-02-06', 3, 0, 0, 1),
-(50, 10, 0, 9, '2025-02-06', 3, 0, 61, 1),
-(73, 11, 55, 10, '2025-02-18', 3, 0, 0, 1),
-(74, 11, 0, 10, '2025-02-18', 3, 0, 70, 1),
-(78, 1, 0, 10, '2025-02-18', 1, 0, 74, 0),
-(101, 6, 0, 10, '2025-02-18', 1, 0, 97, 0),
-(124, 1, 73, 10, '2025-02-18', 1, 0, 0, 0),
-(125, 29, 0, 4, '2025-02-18', 3, 0, 107, 1),
-(126, 7, 0, 4, '2025-02-18', 1, 0, 108, 0),
-(130, 12, 0, 3, '2025-02-18', 1, 0, 112, 0),
-(135, 27, 0, 3, '2025-02-18', 8, 0, 117, 0),
-(136, 29, 0, 3, '2025-02-18', 3, 0, 118, 1),
-(137, 7, 0, 3, '2025-02-18', 1, 0, 119, 0),
-(138, 10, 0, 3, '2025-02-18', 3, 0, 120, 1),
-(139, 8, 0, 3, '2025-02-18', 1, 0, 121, 0),
-(142, 11, 0, 3, '2025-02-18', 3, 0, 122, 1),
-(143, 11, 76, 3, '2025-02-18', 3, 0, 0, 1),
-(144, 11, 77, 3, '2025-02-18', 3, 0, 0, 1);
+INSERT INTO `aghniya_notifikasi` (`aghniya_notifikasi_id`, `aghniya_foto_id`, `aghniya_komentar_id`, `aghniya_user_id`, `created_at`, `aghniya_user_photo_id`, `is_read`, `aghniya_like_id`, `is_notif`, `mark_read`) VALUES
+(27, 8, 0, 1, '2025-01-30', 1, 1, 47, 1, 1),
+(31, 12, 0, 1, '2025-01-30', 1, 1, 51, 0, 1),
+(32, 22, 0, 1, '2025-01-30', 3, 1, 52, 1, 1),
+(33, 1, 0, 1, '2025-01-30', 1, 1, 53, 1, 1),
+(35, 9, 0, 1, '2025-01-30', 1, 1, 56, 1, 1),
+(36, 7, 0, 1, '2025-01-30', 1, 1, 57, 1, 1),
+(37, 11, 0, 1, '2025-01-30', 3, 1, 58, 1, 1),
+(39, 10, 28, 1, '2025-02-05', 3, 1, 0, 1, 1),
+(41, 22, 0, 3, '2025-02-05', 3, 1, 60, 1, 1),
+(42, 22, 31, 3, '2025-02-05', 3, 1, 0, 1, 1),
+(43, 1, 32, 3, '2025-02-06', 1, 1, 0, 1, 1),
+(45, 11, 34, 1, '2025-02-06', 3, 1, 0, 1, 1),
+(48, 12, 37, 1, '2025-02-06', 1, 1, 0, 1, 1),
+(49, 22, 38, 1, '2025-02-06', 3, 1, 0, 1, 1),
+(50, 10, 0, 9, '2025-02-06', 3, 1, 61, 1, 1),
+(73, 11, 55, 10, '2025-02-18', 3, 1, 0, 1, 1),
+(74, 11, 0, 10, '2025-02-18', 3, 1, 70, 1, 1),
+(78, 1, 0, 10, '2025-02-18', 1, 1, 74, 1, 1),
+(101, 6, 0, 10, '2025-02-18', 1, 1, 97, 1, 1),
+(124, 1, 73, 10, '2025-02-18', 1, 1, 0, 1, 1),
+(125, 29, 0, 4, '2025-02-18', 3, 1, 107, 1, 1),
+(130, 12, 0, 3, '2025-02-18', 1, 1, 112, 1, 1),
+(135, 27, 0, 3, '2025-02-18', 8, 0, 117, 0, 0),
+(136, 29, 0, 3, '2025-02-18', 3, 1, 118, 1, 1),
+(137, 7, 0, 3, '2025-02-18', 1, 1, 119, 1, 1),
+(138, 10, 0, 3, '2025-02-18', 3, 1, 120, 1, 1),
+(139, 8, 0, 3, '2025-02-18', 1, 1, 121, 1, 1),
+(142, 11, 0, 3, '2025-02-18', 3, 1, 122, 1, 1),
+(143, 11, 76, 3, '2025-02-18', 3, 1, 0, 1, 1),
+(144, 11, 77, 3, '2025-02-18', 3, 1, 0, 1, 1),
+(155, 6, 0, 4, '2025-02-19', 4, 0, 133, 1, 0),
+(156, 1, 0, 4, '2025-02-19', 1, 1, 134, 0, 1),
+(157, 7, 0, 4, '2025-02-19', 1, 1, 135, 0, 1),
+(158, 7, 78, 4, '2025-02-19', 1, 1, 0, 0, 1),
+(159, 29, 0, 1, '2025-02-20', 3, 1, 136, 1, 1),
+(160, 35, 79, 3, '2025-02-21', 3, 1, 0, 1, 1),
+(161, 6, 0, 3, '2025-02-21', 1, 1, 137, 1, 1),
+(162, 7, 80, 1, '2025-02-21', 1, 1, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -304,7 +325,7 @@ INSERT INTO `aghniya_user` (`aghniya_user_id`, `aghniya_username`, `aghniya_pass
 (7, 'mamal', '743f3cb228516818298313d422b0ffdf', 'sasa@gmail.com', 'mamal', 'aaaa', 2, 0, ''),
 (8, 'kyamalia', '4a3be234543f00d86378c0d6d40d8ecc', 'sasa@gmail.com', 'kyamalia', 'jl abcde', 2, 1, NULL),
 (9, 'amel', 'da0e22de18e3fbe1e96bdc882b912ea4', 'ica@gmail.com', 'amel', 'amel', 2, 1, NULL),
-(10, 'ambar2555', 'a7caf003ad647f5f6fcb76bf9e306430', 'dhiyyaambar@gmail.com', 'dhiyyaambarrrr', 'haji haris', 2, 1, 'profile/ambar_10.jpg');
+(10, 'ambar2555', 'a7caf003ad647f5f6fcb76bf9e306430', 'dhiyyaambar@gmail.com', 'dhiyyaambarrrr', 'haji haris', 2, 1, '');
 
 --
 -- Indexes for dumped tables
@@ -373,31 +394,31 @@ ALTER TABLE `aghniya_user`
 -- AUTO_INCREMENT for table `aghniya_album`
 --
 ALTER TABLE `aghniya_album`
-  MODIFY `aghniya_album_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `aghniya_album_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `aghniya_foto`
 --
 ALTER TABLE `aghniya_foto`
-  MODIFY `aghniya_foto_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `aghniya_foto_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `aghniya_komentar_foto`
 --
 ALTER TABLE `aghniya_komentar_foto`
-  MODIFY `aghniya_komentar_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `aghniya_komentar_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `aghniya_like_foto`
 --
 ALTER TABLE `aghniya_like_foto`
-  MODIFY `aghniya_like_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `aghniya_like_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
 
 --
 -- AUTO_INCREMENT for table `aghniya_notifikasi`
 --
 ALTER TABLE `aghniya_notifikasi`
-  MODIFY `aghniya_notifikasi_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+  MODIFY `aghniya_notifikasi_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
 
 --
 -- AUTO_INCREMENT for table `aghniya_role`
