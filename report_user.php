@@ -184,7 +184,7 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
             </form>
         </div>
 
-        <div class="flex flex-wrap gap-8 sm:gap-12 content-center justify-center my-14">
+        <div class="flex flex-wrap gap-8 sm:gap-12 content-center justify-center my-10">
             <?php while($data = mysqli_fetch_array($sql)) { 
                 $foto = $data['aghniya_foto_id'];
                 $sql_likes = mysqli_query($conn, "SELECT aghniya_like_id FROM aghniya_like_foto WHERE aghniya_foto_id = $foto");
@@ -195,7 +195,7 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
 
                 $liked = mysqli_query($conn, "SELECT * FROM aghniya_like_foto WHERE aghniya_foto_id = $foto AND aghniya_user_id = $userid");
             ?>
-                <a href="photo_detail_user.php?photo_id=<?=$data['aghniya_foto_id']?>" class="bg-gray-100 border border-2 p-2 xs:w-full sm:w-full md:w-1/3 lg:w-1/4 border-gray-200 rounded-lg shadow-md">
+                <a href="photo_detail_user.php?photo_id=<?=$data['aghniya_foto_id']?>" class="bg-gray-100 border border-2 p-2 xs:w-full sm:w-1/3 md:w-1/3 lg:w-1/4 border-gray-200 rounded-lg shadow-md">
                     <div class="w-full border border-2 border-gray-200 border-opacity-80 h-48 rounded-lg">
                         <img src="<?=$data['aghniya_lokasi_file']?>" alt="" class="w-full h-full object-cover rounded-md">
                     </div>
@@ -252,8 +252,8 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
 
 
         <div id="print_info">
-            <div class="text-lg font-semibold my-4">Data</div>
             <?php if (isset($total_likes_album)): ?>
+            <div class="text-lg font-semibold my-4">Data</div>
                 <div class="text-md font-semibold mt-6">
                     <table class="">
                         <tr>
@@ -298,11 +298,17 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
             </div>
         </div>
 
-
         <div class="flex justify-center mt-6" id="pagination_report">
+            <?php 
+                if (isset($_GET['album'])) {
+                    $filter = $_GET['album'];
+                    $filter = '&filter=';
+                }else {
+                    $filter = '&all=';
+                }   
+            ?>
             <div class="flex gap-4">
-                <!-- Previous -->
-                <a href="report_user.php?page=<?= max(1, $page - 1) ?>" 
+                <a href="report_user.php?album=<?=isset($_GET['album']) ? $_GET['album'] : ''?>&page=<?= max(1, $page - 1) ?><?=$filter?>" 
                     class="<?= $page == 1 ? 'disabled' : '' ?> flex items-center justify-center px-3 h-8 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 hover:text-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-3 bi bi-arrow-left-circle" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
@@ -310,8 +316,7 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
                     Previous
                 </a>
 
-                <!-- Next -->
-                <a href="report_user.php?page=<?= min($page + 1, $total_pages) ?>" 
+                <a href="report_user.php?album=<?=isset($_GET['album']) ? $_GET['album'] : ''?>&page=<?= min($page + 1, $total_pages) ?><?=$filter?>" 
                     class="<?= $page == $total_pages ? 'disabled' : '' ?> flex items-center justify-center px-3 h-8 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 hover:text-gray-700">
                     Next
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ml-3 bi bi-arrow-right-circle" viewBox="0 0 16 16">
@@ -324,7 +329,7 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
 
     <script>
     function printPage() {
-        window.print(); // This opens the print dialog to print the page
+        window.print();
     }
 </script>
 
