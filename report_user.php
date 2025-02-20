@@ -59,8 +59,19 @@ if (isset($_SESSION['aghniya_username'])) {
             die("Query gagal: " . mysqli_error($conn));
         }
 
-        $album_get = mysqli_fetch_assoc($album_query);
+        // $album_get = mysqli_fetch_assoc($album_query);
         // var_dump($album_get);
+
+
+        $foto_query = mysqli_query($conn, "SELECT * FROM aghniya_foto WHERE aghniya_album_id = '$filter_album'");
+
+        if (!$foto_query) {
+            die("Query gagal: " . mysqli_error($conn));
+        }
+
+        $foto_get = mysqli_fetch_assoc($foto_query);
+        $jum_foto = mysqli_num_rows($foto_query);
+        // var_dump($foto_get);
 
         
         //total likes
@@ -100,15 +111,95 @@ if (isset($_SESSION['aghniya_username'])) {
     }
 
 // all filter
-    if (isset($_GET['all'])) {
-        unset($_GET['album']);
+if (isset($_GET['all'])) {
+    unset($_GET['album']);
+    
+    $album_query = mysqli_query($conn, "SELECT aghniya_nama_album FROM aghniya_album WHERE aghniya_user_id = $userid");
+    if (!$album_query) {
+        die("Query gagal: " . mysqli_error($conn));
+    }
 
-        $sql = mysqli_query($conn, "SELECT DISTINCT aghniya_foto.aghniya_foto_id, aghniya_foto.aghniya_lokasi_file, aghniya_user.aghniya_username
-            FROM aghniya_foto
-            LEFT JOIN aghniya_user ON aghniya_foto.aghniya_user_id = aghniya_user.aghniya_user_id
-            WHERE aghniya_user.aghniya_username = '$user'
-            LIMIT $limit OFFSET $offset
+    $sql = mysqli_query($conn, "SELECT DISTINCT aghniya_foto.aghniya_foto_id, aghniya_foto.aghniya_lokasi_file, aghniya_user.aghniya_username
+        FROM aghniya_foto
+        LEFT JOIN aghniya_user ON aghniya_foto.aghniya_user_id = aghniya_user.aghniya_user_id
+        WHERE aghniya_user.aghniya_username = '$user'");
+
+        //total likes
+        $sql_likes_album = mysqli_query($conn, "
+            SELECT COUNT(*) as total_likes
+            FROM aghniya_like_foto
+            WHERE aghniya_foto_id IN (SELECT aghniya_foto_id FROM aghniya_foto) AND aghniya_user_id = $userid
         ");
+        $data_likes_album = mysqli_fetch_assoc($sql_likes_album);
+        $total_likes_album = $data_likes_album['total_likes'];
+
+        //total comment 
+        $sql_total_comments_album = mysqli_query($conn, "
+            SELECT COUNT(aghniya_komentar_foto.aghniya_komentar_id) AS total_comments
+            FROM aghniya_komentar_foto
+            LEFT JOIN aghniya_foto ON aghniya_komentar_foto.aghniya_foto_id = aghniya_foto.aghniya_foto_id
+            LEFT JOIN aghniya_album ON aghniya_foto.aghniya_album_id = aghniya_album.aghniya_album_id
+            WHERE aghniya_album.aghniya_user_id = $userid 
+        ");
+        $data_comments_album = mysqli_fetch_assoc($sql_total_comments_album);
+        $total_comments_album = $data_comments_album['total_comments'];
+        
+}else{
+    $album_query = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM aghniya_album WHERE aghniya_user_id = $userid");
+    if (!$album_query) {
+        die("Query gagal: " . mysqli_error($conn));
+    }
+
+    //total likes
+    $sql_likes_album = mysqli_query($conn, "
+        SELECT COUNT(*) as total_likes
+            FROM aghniya_like_foto
+            WHERE aghniya_foto_id IN (SELECT aghniya_foto_id FROM aghniya_foto) AND aghniya_user_id = $userid
+    ");
+
+        $data_likes_album = mysqli_fetch_assoc($sql_likes_album);
+        $total_likes_album = $data_likes_album['total_likes'];
+
+        //total comment 
+        $sql_total_comments_album = mysqli_query($conn, "
+            SELECT COUNT(aghniya_komentar_foto.aghniya_komentar_id) AS total_comments
+            FROM aghniya_komentar_foto
+            LEFT JOIN aghniya_foto ON aghniya_komentar_foto.aghniya_foto_id = aghniya_foto.aghniya_foto_id
+            LEFT JOIN aghniya_album ON aghniya_foto.aghniya_album_id = aghniya_album.aghniya_album_id
+            WHERE aghniya_album.aghniya_user_id = $userid 
+        ");
+        $data_comments_album = mysqli_fetch_assoc($sql_total_comments_album);
+        $total_comments_album = $data_comments_album['total_comments'];
+
+
+        $albums_data = []; 
+
+while ($album_get = mysqli_fetch_assoc($album_query)) {
+    $album_id = $album_get['aghniya_album_id'];
+    
+    $sql_likes_album = mysqli_query($conn, "
+        SELECT COUNT(*) as total_likes
+        FROM aghniya_like_foto
+        WHERE aghniya_foto_id IN (SELECT aghniya_foto_id FROM aghniya_foto WHERE aghniya_album_id = '$album_id')
+    ");
+    $data_likes_album = mysqli_fetch_assoc($sql_likes_album);
+    $total_likes_album = $data_likes_album['total_likes'];
+
+    $sql_total_comments_album = mysqli_query($conn, "
+        SELECT COUNT(aghniya_komentar_foto.aghniya_komentar_id) AS total_comments
+        FROM aghniya_komentar_foto
+        LEFT JOIN aghniya_foto ON aghniya_komentar_foto.aghniya_foto_id = aghniya_foto.aghniya_foto_id
+        WHERE aghniya_foto.aghniya_album_id = '$album_id'
+    ");
+    $data_comments_album = mysqli_fetch_assoc($sql_total_comments_album);
+    $total_comments_album = $data_comments_album['total_comments'];
+
+    $albums_data[] = [
+        'name' => $album_get['aghniya_nama_album'],
+        'likes' => $total_likes_album,
+        'comments' => $total_comments_album
+    ];
+}
 }
 
 // data album dropdown
@@ -184,7 +275,7 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
             </form>
         </div>
 
-        <div class="flex flex-wrap gap-8 sm:gap-12 content-center justify-center my-10">
+        <!-- <div class="flex flex-wrap gap-8 sm:gap-12 content-center justify-center my-10">
             <?php while($data = mysqli_fetch_array($sql)) { 
                 $foto = $data['aghniya_foto_id'];
                 $sql_likes = mysqli_query($conn, "SELECT aghniya_like_id FROM aghniya_like_foto WHERE aghniya_foto_id = $foto");
@@ -248,36 +339,30 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
                     </div>
                 </a>
             <?php } ?>
-        </div>
-
+        </div> -->
 
         <div id="print_info">
-            <?php if (isset($total_likes_album)): ?>
-            <div class="text-lg font-semibold my-4">Data</div>
-                <div class="text-md font-semibold mt-6">
-                    <table class="">
-                        <tr>
-                            <td class="px-3">Nama Album</td>
-                            <td class="px-3">:</td>
-                            <td class="px-3"><?=$album_get['aghniya_nama_album']?></td>
-                        </tr>
-                        <tr>
-                            <td class="px-3">Jumlah Seluruh Like</td>
-                            <td class="px-3">:</td>
-                            <td class="px-3"><?=$total_likes_album?> Likes</td>
-                        </tr>
-                        <tr>
-                            <td class="px-3">Jumlah Seluruh Komentar</td>
-                            <td class="px-3">:</td>
-                            <td class="px-3"><?=$total_comments_album?> Komentar</td>
-                        </tr>
-                    </table>
-                    <!-- Jumlah Like pada album ini adalah: <?= $total_likes_album ?> likes -->
-                </div>
-            <?php endif; ?>
+                <div class="text-lg font-semibold my-4" id="data">Data Album</div>
+                        <div class="text-md font-semibold mt-6 p-5">
+                            <table class="border border-3 border-black w-full">
+                                <tr>
+                                    <th class="w-1/3 border p-3">Nama Album</th>
+                                    <th class="w-1/3 border p-3">Jumlah Like</th>
+                                    <th class="w-1/3 border p-3">Jumlah Komentar</th>
+                                </tr>
+                                <?php while ($album_get = mysqli_fetch_assoc($album_query)) { ?>
+                                <tr>
+                                    <td class="text-center border p-2"><?=$album_get['aghniya_nama_album']?></td>
+                                    <td class="text-center border p-2"><?=$total_likes_album?></td>
+                                    <td class="text-center border p-2"><?=$total_comments_album?></td>
+                                </tr>
+                                <?php } ?>
+                            </table>
+                        </div>
         </div>
+        
 
-        <div id="print_info_all" style="display: <?= isset($_GET['album']) ? 'none' : 'block'; ?>;">
+        <!-- <div id="print_info_all" style="display: <?= isset($_GET['album']) ? 'none' : 'block'; ?>;">
             <div class="text-lg font-semibold my-4">Data</div>
             <div class="text-md font-semibold mt-6">
                 <table class="">
@@ -296,9 +381,9 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
                     </tr>
                 </table>
             </div>
-        </div>
+        </div> -->
 
-        <div class="flex justify-center mt-6" id="pagination_report">
+        <!-- <div class="flex justify-center mt-6" id="pagination_report">
             <?php 
                 if (isset($_GET['album'])) {
                     $filter = $_GET['album'];
@@ -324,7 +409,9 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
                     </svg>
                 </a>
             </div>
-        </div>
+        </div> -->
+
+
     </div>
 
     <script>

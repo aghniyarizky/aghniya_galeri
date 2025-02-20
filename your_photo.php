@@ -206,6 +206,12 @@ $albums = mysqli_query($conn, "SELECT aghniya_album_id, aghniya_nama_album FROM 
         </a>
     </div>
 </div>
+                <div class="flex gap-3 content-center justify-center my-5">
+                    Page 
+                    <a href="your_photo.php?page=<?=$page?>"><?=$page?></a>                                                
+                    from 
+                    <a href="your_photo.php?page=<?=$total_pages?>"> <?=$total_pages?> </a>
+                </div>
     </div>
 </body>
 </html>

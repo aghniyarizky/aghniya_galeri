@@ -12,7 +12,7 @@ if (isset($_SESSION['aghniya_username'])) {
         LEFT JOIN aghniya_komentar_foto ON aghniya_notifikasi.aghniya_komentar_id = aghniya_komentar_foto.aghniya_komentar_id
         LEFT JOIN aghniya_user ON aghniya_notifikasi.aghniya_user_id = aghniya_user.aghniya_user_id
         LEFT JOIN aghniya_like_foto ON aghniya_notifikasi.aghniya_like_id = aghniya_like_foto.aghniya_like_id
-        WHERE aghniya_notifikasi.aghniya_user_photo_id = $users AND aghniya_notifikasi.is_read = 0;");
+        WHERE aghniya_notifikasi.aghniya_user_photo_id = $users AND aghniya_notifikasi.mark_read = 0;");
 
     $total_not_read = mysqli_num_rows($sql_not_read);
 
@@ -60,7 +60,7 @@ if (isset($_SESSION['aghniya_username'])) {
         LEFT JOIN aghniya_komentar_foto ON aghniya_notifikasi.aghniya_komentar_id = aghniya_komentar_foto.aghniya_komentar_id
         LEFT JOIN aghniya_user ON aghniya_notifikasi.aghniya_user_id = aghniya_user.aghniya_user_id
         LEFT JOIN aghniya_like_foto ON aghniya_notifikasi.aghniya_like_id = aghniya_like_foto.aghniya_like_id
-        WHERE aghniya_notifikasi.aghniya_user_photo_id = $users AND aghniya_notifikasi.is_read = 0;");
+        WHERE aghniya_notifikasi.aghniya_user_photo_id = $users");
 
     $total = mysqli_num_rows($sql);
 
@@ -271,9 +271,9 @@ if (isset($_SESSION['aghniya_username'])) {
                         <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
                         </svg>
                     <span class="flex-1 ms-3 whitespace-nowrap">Notification</span>
-                    <!-- <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full"><?=$total?></span> -->
-                        <?php if($total > 0 ): ?>
-                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 text-sm font-medium text-white bg-red-700 rounded-full"><?=$total?></span>
+                    <!-- <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full"><?=$total_not_read?></span> -->
+                        <?php if($total_not_read > 0 ): ?>
+                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 text-sm font-medium text-white bg-red-700 rounded-full"><?=$total_not_read?></span>
                         <?php endif; ?>
                     </a>
                 </li>

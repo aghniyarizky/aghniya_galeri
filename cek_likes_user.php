@@ -15,7 +15,7 @@ if(isset($_POST['likes'])){
 
         if($sql_likes){
             $id_like = mysqli_insert_id($conn);
-            $sql_notification = mysqli_query($conn, "INSERT INTO aghniya_notifikasi VALUES (NULL, $id_photo, 0, $id_user, now(), $id_user_photo, 0, $id_like, 0)");
+            $sql_notification = mysqli_query($conn, "INSERT INTO aghniya_notifikasi VALUES (NULL, $id_photo, 0, $id_user, now(), $id_user_photo, 0, $id_like, 0,0)");
 
             echo "<script>
                     location.href='$direction_path';

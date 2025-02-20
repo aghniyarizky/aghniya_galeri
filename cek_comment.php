@@ -14,7 +14,7 @@ if (isset($_POST['comment_user'])) {
     if ($sql_comment) {
         $id_komen = mysqli_insert_id($conn);
 
-        $sql_notification = mysqli_query($conn, "INSERT INTO aghniya_notifikasi VALUES (NULL, $id_photo, $id_komen, $id_user, now(), $id_user_photo, 0, 0, 0)");
+        $sql_notification = mysqli_query($conn, "INSERT INTO aghniya_notifikasi VALUES (NULL, $id_photo, $id_komen, $id_user, now(), $id_user_photo, 0, 0, 0, 0)");
 
         if ($sql_notification) {
             // $redirect_url = isset($_GET['photo_id']) ? "photo_detail.php?id_photo=$id_photo" : "photo_detail_user.php?photo_id=$id_photo";

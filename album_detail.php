@@ -168,6 +168,13 @@ if ($album_id) {
                         </div>
                     </div>
                 </div>
+                <div class="flex gap-3 content-center justify-center my-5">
+                    Page 
+                    <a href="album_detail.php?page=<?=$currentPage?>"><?=$currentPage?></a>
+
+                    from 
+                    <a class="album_detail.php?page=<?=$totalPages?>"> <?=$totalPages?> </div>
+                </div>
             <?php } else { ?>
                 <div class="text-center font-semibold text-xl text-gray-500">Album Not Found</div>
             <?php } ?>

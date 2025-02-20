@@ -11,13 +11,14 @@ if (isset($_SESSION['aghniya_username'])) {
             ON aghniya_notifikasi.aghniya_komentar_id = aghniya_komentar_foto.aghniya_komentar_id
         LEFT JOIN aghniya_user ON aghniya_notifikasi.aghniya_user_id = aghniya_user.aghniya_user_id
         LEFT JOIN aghniya_like_foto ON aghniya_notifikasi.aghniya_like_id = aghniya_like_foto.aghniya_like_id
-        WHERE aghniya_notifikasi.aghniya_user_photo_id = $user AND aghniya_notifikasi.is_read = 0;");
+        WHERE aghniya_notifikasi.aghniya_user_photo_id = $user;");
 
     $total = mysqli_num_rows($sql);
+    // echo $total;
 
     if(isset($_POST['read'])){
         $sql_read = mysqli_query($conn, "UPDATE aghniya_notifikasi
-        SET is_read = 1
+        SET is_read = 1, mark_read = 1
         WHERE aghniya_user_photo_id = $user");
     }
 
