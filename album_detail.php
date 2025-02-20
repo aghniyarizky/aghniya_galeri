@@ -77,7 +77,7 @@ if ($album_id) {
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-wrap gap-8 sm:gap-12 content-center justify-center mt-9">
+                <div class="flex flex-wrap gap-8 sm:gap-12 content-center justify-center mt-9 mb-8">
                     <?php if (empty($dataArray)){ ?>
                         <div class="text-center font-semibold text-xl text-gray-500">You have 0 picture in this album</div>
                     <?php }else{                             
@@ -148,8 +148,8 @@ if ($album_id) {
                             </a>
                         <?php } } ?>
                     </div>
-                    <div class="flex justify-center mt-6">
-                        <div class="flex gap-4">
+                    <div class="flex justify-center mt-2">
+                        <div class="flex gap-1">
                             <a href="album_detail.php?album_id=<?=$album_id?>&page=<?= max(1, $currentPage - 1) ?>" 
                                 class="<?= $currentPage == 1 ? 'disabled' : '' ?> flex items-center justify-center px-3 h-8 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 hover:text-gray-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-3 bi bi-arrow-left-circle" viewBox="0 0 16 16">

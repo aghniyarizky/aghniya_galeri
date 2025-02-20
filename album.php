@@ -43,7 +43,7 @@ $sql = mysqli_query($conn, "
     <link href="./src/output.css" rel="stylesheet">
 </head>
 <body>
-    <div class="flex flex-wrap gap-8 items-center justify-center content-center">
+    <div class="flex flex-wrap gap-8 items-center justify-center content-center mb-7">
     <?php while($data = mysqli_fetch_assoc($sql)) { 
         $album_id = $data['aghniya_album_id'];
         $first_sql = mysqli_query($conn, "
@@ -90,8 +90,8 @@ $sql = mysqli_query($conn, "
     <?php } ?>
 </div>
 
-    <div class="flex justify-center mt-6">
-        <div class="flex gap-4">
+    <div class="flex justify-center mt-3">
+        <div class="flex gap-1">
             <a href="user_page.php?page=<?= max(1, $page - 1) ?>" 
                 class="<?= $page == 1 ? 'disabled' : '' ?> flex items-center justify-center px-3 h-8 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 hover:text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-3 bi bi-arrow-left-circle" viewBox="0 0 16 16">
